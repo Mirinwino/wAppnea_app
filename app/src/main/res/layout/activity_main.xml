@@ -11,11 +11,11 @@
         android:layout_width="335dp"
         android:layout_height="wrap_content"
         android:text="Welcome to wAppnea.  \n\n
-        wAppnea together with your abdominal belt will study your slepp to detect apnea episodes. \n\n
+        wAppnea together with your abdominal belt will study your sleep to detect apnea episodes. \n\n
         To start the study wear your belt to bed, relax and press “start sleep”"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="34sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
