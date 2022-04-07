@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/gizem/Desktop/PortableHealthTech/wAppnea_app/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/gizem/Desktop/PortableHealthTech/wAppnea_app/app/src/main/res/layout/activity_night_summary.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/gizem/Desktop/PortableHealthTech/wAppnea_app/app/src/main/res/layout/activity_while_sleeping.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_night_summary.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_while_sleeping.xml" value="0.125" />
