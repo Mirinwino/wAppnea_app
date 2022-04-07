@@ -11,7 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="335dp"
         android:layout_height="wrap_content"
-        android:text="aaaawAppnea is studying your sleep to detect apnea episodes. \n \n         Press “wake up” when you wake up to finish the study and obtain your summary results"
+        android:text="Appnea is studying your sleep to detect apnea episodes. \n \n         Press “wake up” when you wake up to finish the study and obtain your summary results"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#F44336"
