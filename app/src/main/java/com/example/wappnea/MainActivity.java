@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import java.lang.Math;
+import java.lang.String;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
@@ -87,15 +88,57 @@ public class MainActivity extends AppCompatActivity {
         return subst;
     }
 
-    private static double[] standardization(double[] parameterValues){
-        double meanParam = mean(parameterValues);
-        double stdParam = std(parameterValues);
-        double[] standardizedParameterValues = new double[parameterValues.length];
+    private static double decision_tree(double[] dataWindow){
 
-        for (int i=0; i<parameterValues.length; i++){
-            standardizedParameterValues[i] = (parameterValues[i]-meanParam)/stdParam;
+        double test_mean = mean(dataWindow);
+        double test_std = std(dataWindow);
+        double test_energy = energy(dataWindow);
+        double test_mean_der = mean_derivative(dataWindow);
+        double estimated_class = 0;
+
+        if (test_energy<-0.365707){
+            if (test_mean_der<-0.708075){
+                if(test_energy<-0.897993){
+                    if(test_std<-1.72754){
+                        estimated_class = 1;
+                    }
+                }
+                    else if (test_mean_der<-1.61229){
+                        if(test_std<-2.06214){
+                            estimated_class = 1;
+                        }
+                    }
+                    else{
+                        estimated_class = 1;
+                    }
+            }
+                else if(test_energy<-0.52561){
+                    estimated_class = 1;
+                }
+                    else if (test_std<-0.579833){
+                        estimated_class = 1;
+                    }
+                        else if(test_mean>=0.151772){
+                            estimated_class = 1;
+                        }
         }
-        return standardizedParameterValues;
+            else if (test_energy<0.139){
+                if(test_energy<-0.240547){
+                    if(test_mean_der<0.242473){
+                        if(test_mean>=0.995959){
+                            estimated_class = 1;
+                        }
+                    }
+                    else{
+                        estimated_class = 1;
+                    }
+                }
+                    else if(test_mean>=1.65685){
+                        estimated_class = 1;
+                    }
+            }
+
+        return  estimated_class;
     }
 }
 
