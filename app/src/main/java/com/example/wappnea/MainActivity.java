@@ -32,6 +32,32 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent_1);
     }
 
+    private static double[][] extract_feature(double[][] dataWindows){
+
+        double[] mean = new double[dataWindows.length];
+        double[] std = new double[dataWindows.length];
+        double[] energy = new double[dataWindows.length];
+        double[] mean_der = new double[dataWindows.length];
+
+        for (int i=0;i<dataWindows.length;i++){
+            mean[i] = mean(dataWindows[i]);
+            std[i] = std(dataWindows[i]);
+            energy[i] = energy(dataWindows[i]);
+            mean_der[i] = mean_derivative(dataWindows[i]);
+        }
+
+        double[] standardized_mean = standardization(mean);
+        double[] standardized_std = standardization(std);
+        double[] standardized_energy = standardization(energy);
+        double[] standardized_mean_der = standardization(mean_der);
+
+        double[][] all_features = {standardized_mean,standardized_std,standardized_energy,standardized_mean_der};
+
+        return all_features;
+    }
+
+
+
     // reference https://searchcode.com/codesearch/view/78094523/
     private static double mean(double[] dataWindow){
 
@@ -99,26 +125,18 @@ public class MainActivity extends AppCompatActivity {
         return standardizedParameterValues;
     }
 
-    private static double decision_tree(double[] dataWindow){
-
-        double test_mean = mean(dataWindow);
-        double test_std = std(dataWindow);
-        double test_energy = energy(dataWindow);
-        double test_mean_der = mean_derivative(dataWindow);
-        double[] parameterValues = {test_mean,test_std,test_energy,test_mean_der} ;
-        parameterValues = standardization(parameterValues);
-
+    private static double decision_tree(double[] features){
         double estimated_class = 0;
 
-        if (parameterValues[3]<-0.365707){
-            if (parameterValues[4]<-0.708075){
-                if(parameterValues[3]<-0.897993){
-                    if(parameterValues[2]<-1.72754){
+        if (features[3]<-0.365707){
+            if (features[4]<-0.708075){
+                if(features[3]<-0.897993){
+                    if(features[2]<-1.72754){
                         estimated_class = 1;
                     }
                 }
-                    else if (parameterValues[4]<-1.61229){
-                        if(parameterValues[2]<-2.06214){
+                    else if (features[4]<-1.61229){
+                        if(features[2]<-2.06214){
                             estimated_class = 1;
                         }
                     }
@@ -126,20 +144,20 @@ public class MainActivity extends AppCompatActivity {
                         estimated_class = 1;
                     }
             }
-                else if(parameterValues[3]<-0.52561){
+                else if(features[3]<-0.52561){
                     estimated_class = 1;
                 }
-                    else if (parameterValues[2]<-0.579833){
+                    else if (features[2]<-0.579833){
                         estimated_class = 1;
                     }
-                        else if(parameterValues[1]>=0.151772){
+                        else if(features[1]>=0.151772){
                             estimated_class = 1;
                         }
         }
-            else if (parameterValues[3]<0.139){
-                if(parameterValues[3]<-0.240547){
-                    if(parameterValues[4]<0.242473){
-                        if(parameterValues[1]>=0.995959){
+            else if (features[3]<0.139){
+                if(features[3]<-0.240547){
+                    if(features[4]<0.242473){
+                        if(features[1]>=0.995959){
                             estimated_class = 1;
                         }
                     }
@@ -147,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         estimated_class = 1;
                     }
                 }
-                    else if(parameterValues[1]>=1.65685){
+                    else if(features[1]>=1.65685){
                         estimated_class = 1;
                     }
             }
