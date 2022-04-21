@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import java.lang.Math;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
         energy /= (double)dataWindow.length;
 
         return energy;
+    }
+
+    private static double mean_derivative(double[] dataWindow){
+
+        double[] mean_der = new double[dataWindow.length];
+
+        for (int i=1;i<dataWindow.length;i++){
+            mean_der[i] = Math.abs(dataWindow[i] - dataWindow[i-1]);
+        }
+
+        return mean(mean_der);
     }
 
     // reference https://searchcode.com/codesearch/view/78094523/
