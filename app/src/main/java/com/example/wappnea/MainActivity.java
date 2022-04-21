@@ -88,6 +88,17 @@ public class MainActivity extends AppCompatActivity {
         return subst;
     }
 
+    private static double[] standardization(double[] parameterValues){
+        double meanParam = mean(parameterValues);
+        double stdParam = std(parameterValues);
+        double[] standardizedParameterValues = new double[parameterValues.length];
+
+        for (int i=0; i<parameterValues.length; i++){
+            standardizedParameterValues[i] = (parameterValues[i]-meanParam)/stdParam;
+        }
+        return standardizedParameterValues;
+    }
+
     private static double decision_tree(double[] dataWindow){
 
         double test_mean = mean(dataWindow);
