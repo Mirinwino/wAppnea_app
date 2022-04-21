@@ -105,17 +105,20 @@ public class MainActivity extends AppCompatActivity {
         double test_std = std(dataWindow);
         double test_energy = energy(dataWindow);
         double test_mean_der = mean_derivative(dataWindow);
+        double[] parameterValues = {test_mean,test_std,test_energy,test_mean_der} ;
+        parameterValues = standardization(parameterValues);
+
         double estimated_class = 0;
 
-        if (test_energy<-0.365707){
-            if (test_mean_der<-0.708075){
-                if(test_energy<-0.897993){
-                    if(test_std<-1.72754){
+        if (parameterValues[3]<-0.365707){
+            if (parameterValues[4]<-0.708075){
+                if(parameterValues[3]<-0.897993){
+                    if(parameterValues[2]<-1.72754){
                         estimated_class = 1;
                     }
                 }
-                    else if (test_mean_der<-1.61229){
-                        if(test_std<-2.06214){
+                    else if (parameterValues[4]<-1.61229){
+                        if(parameterValues[2]<-2.06214){
                             estimated_class = 1;
                         }
                     }
@@ -123,20 +126,20 @@ public class MainActivity extends AppCompatActivity {
                         estimated_class = 1;
                     }
             }
-                else if(test_energy<-0.52561){
+                else if(parameterValues[3]<-0.52561){
                     estimated_class = 1;
                 }
-                    else if (test_std<-0.579833){
+                    else if (parameterValues[2]<-0.579833){
                         estimated_class = 1;
                     }
-                        else if(test_mean>=0.151772){
+                        else if(parameterValues[1]>=0.151772){
                             estimated_class = 1;
                         }
         }
-            else if (test_energy<0.139){
-                if(test_energy<-0.240547){
-                    if(test_mean_der<0.242473){
-                        if(test_mean>=0.995959){
+            else if (parameterValues[3]<0.139){
+                if(parameterValues[3]<-0.240547){
+                    if(parameterValues[4]<0.242473){
+                        if(parameterValues[1]>=0.995959){
                             estimated_class = 1;
                         }
                     }
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                         estimated_class = 1;
                     }
                 }
-                    else if(test_mean>=1.65685){
+                    else if(parameterValues[1]>=1.65685){
                         estimated_class = 1;
                     }
             }
