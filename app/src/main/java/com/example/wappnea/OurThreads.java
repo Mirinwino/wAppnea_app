@@ -14,6 +14,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
     private boolean endThread;
     private String threadName;
     Thread thread;
+    public double[][] abDataValues;
 
     OurThreads(String theName){
         threadName = theName;
@@ -25,8 +26,8 @@ public class OurThreads extends WhileSleeping implements Runnable{
     // execution of thread starts from run() method
     public void run()
     {
-        FileInputStream fIn = null;
 
+        FileInputStream fIn = null;
         File file = new File(path, this.fileName);
         Log.d(LOG_Thread, file.getAbsolutePath());
         String ret = "";
@@ -39,7 +40,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 try {
                     if(endThread==false){
                         abData.add(Double.parseDouble(receiveString));
-                        Log.d(LOG_Thread,"Value: " + receiveString);
+                        //Log.d(LOG_Thread,"Value: " + receiveString);
                         //Thread.sleep(25);
                     }
                     else{
@@ -49,6 +50,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
                     Log.d(LOG_Thread, e.getMessage());
                 }
             }
+            Log.d(LOG_Thread,"The reading ends");
             exit();
         }
         catch (IOException e) {
@@ -64,15 +66,18 @@ public class OurThreads extends WhileSleeping implements Runnable{
     }
 
     // for stopping the thread
-    public void exit()
+    public double[][] exit()
     {
         endThread = true;
-        //double[] abDataValues = new double[abData.size()];
-        //for (int j = 0; j < abDataValues.length; j++) {
-        //    abDataValues[j] = Double.parseDouble(abData.get(j));
-        //    Log.d(LOG_WhileSleeping,"Value: " + j + " "+ abDataValues[j]);
-        //}
-        //return abDataValues;
+        int windowNum=abData.size()/40;
+        abDataValues = new double[windowNum][40];
+        for (int i = 0; i<windowNum-1;  i++){
+            for (int j = 0; j < 40; j++) {
+                abDataValues[i][j] = abData.get(i*40+j);
+                //Log.d(LOG_WhileSleeping,"Value: " + i+"-"+j + " "+ abDataValues[i][j]);
+            }
+        }
+        return abDataValues;
     }
 
     public void ReadTxtFile() {
