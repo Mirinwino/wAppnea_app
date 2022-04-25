@@ -67,6 +67,7 @@ public class WhileSleeping extends AppCompatActivity {
                     else{
                         windows= t1.abDataValues;
                     }
+                    double apneaFilter[]=new double[windows.length*40];
                     features=extract_feature(windows);
                     double[] My_0 = new double[4];
                     for (int i=0; i<windows.length;i++){
@@ -74,9 +75,24 @@ public class WhileSleeping extends AppCompatActivity {
                             My_0[j] = features[j][i];
                         }
                         if(decision_tree(My_0)==1){
-                            numApp++;
-                            if(i<windows.length-3){
-                                i=i+2;
+                            for(int k=0; k<40; k++){
+                                apneaFilter[40*i+k]=1;
+                            }
+                            //numApp++;
+                            //if(i<windows.length-3){
+                            //    i=i+2;
+                            //}
+                        }
+                        else{
+                            for(int k=0; k<40; k++){
+                                apneaFilter[40*i+k]=0;
+                            }
+                        }
+                    }
+                    for (int i=40; i<apneaFilter.length; i=i+40){
+                        if(apneaFilter[i]-apneaFilter[i-40]==1){
+                            if(apneaFilter[i+40]-apneaFilter[i]==0){
+                                numApp++;
                             }
                         }
                     }

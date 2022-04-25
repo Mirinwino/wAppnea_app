@@ -71,7 +71,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
         endThread = true;
         int windowNum=abData.size()/40;
         abDataValues = new double[windowNum][40];
-        for (int i = 0; i<windowNum-1;  i++){
+        for (int i = 0; i<windowNum;  i++){
             for (int j = 0; j < 40; j++) {
                 abDataValues[i][j] = abData.get(i*40+j);
                 //Log.d(LOG_WhileSleeping,"Value: " + i+"-"+j + " "+ abDataValues[i][j]);
