@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
@@ -40,7 +41,6 @@ public class WhileSleeping extends AppCompatActivity {
     double[][] features;
     public String LOG_WhileSleeping = "whileSleeping";
     public String path=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-
     //private static final int REQUEST_EXTERNAL_STORAGE = 1;
     //private static String[] PERMISSIONS_STORAGE = {
     //        Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -50,6 +50,13 @@ public class WhileSleeping extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_while_sleeping);
+        // define date and time format and get current date and time
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timef = new SimpleDateFormat("HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        String date = sdf.format(c.getTime());
+        String startTime = timef.format(c.getTime());
+
         Log.i(LOG_WhileSleeping, "The storage directory is at:" + this.path);
         OurThreads t1 = new OurThreads("txt_reading");
         //"setOnClickListener" run if the specified button is clicked.
@@ -97,7 +104,26 @@ public class WhileSleeping extends AppCompatActivity {
                         }
                     }
                     Log.d(LOG_WhileSleeping,"Value: " + numApp);
+
                     Intent intent_2 = new Intent(WhileSleeping.this, NightSummary.class);
+
+                    //calculate end time and duration based on number of samples acquired
+                    long start = c.getTimeInMillis();
+                    long duration = windows.length*5*1000; // in milliseconds
+                    long end = start+duration;
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(end);
+                    String endTime = timef.format(c2.getTime());
+                    //info to pass to the next activity
+                    Bundle info = new Bundle();
+                    info.putString("label_date",date);
+                    info.putString("label_startTime", startTime);
+                    info.putLong("label_duration", duration);
+                    info.putString("label_endTime", endTime);
+                    info.putInt("label_numEvents", numApp);
+
+                    intent_2.putExtras(info);
+
                     startActivity(intent_2);
                 }
                 catch (Exception e) {
