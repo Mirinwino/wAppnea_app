@@ -101,6 +101,11 @@ public class WhileSleeping extends AppCompatActivity {
                             if(apneaFilter[i+40]-apneaFilter[i]==0){
                                 numApp++;
                             }
+                            else {
+                                for(int k=0; k<40; k++) {
+                                    apneaFilter[i+k] = 0;
+                                }
+                            }
                         }
                     }
                     Log.d(LOG_WhileSleeping,"Value: " + numApp);
