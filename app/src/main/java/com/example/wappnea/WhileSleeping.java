@@ -227,15 +227,20 @@ public class WhileSleeping extends AppCompatActivity {
     private static double decision_tree(double[] features){
         double estimated_class = 0;
 
-        if (features[2]<-0.365707){
-            if (features[3]<-0.708075){
-                if(features[2]<-0.897993){
-                    if(features[1]<-1.72754){
+        if (features[2]<-0.362501){
+            if (features[1]<-0.749474){
+                if(features[3]<-1.36836){
+                    if(features[0]<0.0798692){
+                        if(features[0]<-0.0602798) {
+                            estimated_class = 1;
+                        }
+                    }
+                    else{
                         estimated_class = 1;
                     }
                 }
-                else if (features[3]<-1.61229){
-                    if(features[1]<-2.06214){
+                else if (features[2]<-0.701544){
+                    if(features[2]>=-0.886344){
                         estimated_class = 1;
                     }
                 }
@@ -243,29 +248,21 @@ public class WhileSleeping extends AppCompatActivity {
                     estimated_class = 1;
                 }
             }
-            else if(features[2]<-0.52561){
+            else if(features[2]<-0.457291){
                 estimated_class = 1;
             }
-            else if (features[1]<-0.579833){
+            else if (features[3]<-0.616622){
                 estimated_class = 1;
             }
-            else if(features[0]>=0.151772){
+            else if(features[3]>=-0.317697){
                 estimated_class = 1;
             }
         }
-        else if (features[2]<0.139){
-            if(features[2]<-0.240547){
-                if(features[3]<0.242473){
-                    if(features[0]>=0.995959){
-                        estimated_class = 1;
-                    }
-                }
-                else{
+        else if (features[2]<0.166415){
+            if(features[2]<-0.239886){
+                if(features[3]>=0.126378){
                     estimated_class = 1;
                 }
-            }
-            else if(features[0]>=1.65685){
-                estimated_class = 1;
             }
         }
 
