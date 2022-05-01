@@ -1,22 +1,35 @@
 package com.example.wappnea;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import java.lang.Math;
 import java.lang.String;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity {
+    public static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Button button_1 = findViewById(R.id.btnStartSleep);
 
         button_1.setOnClickListener(new View.OnClickListener() {

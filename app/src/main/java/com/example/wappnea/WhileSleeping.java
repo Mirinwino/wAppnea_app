@@ -2,9 +2,12 @@ package com.example.wappnea;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -40,12 +43,13 @@ public class WhileSleeping extends AppCompatActivity {
     public double[][] windows;
     double[][] features;
     public String LOG_WhileSleeping = "whileSleeping";
-    public String path=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-    //private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    //private static String[] PERMISSIONS_STORAGE = {
-    //        Manifest.permission.READ_EXTERNAL_STORAGE,
-    //};
-
+    //public String path=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static final int EXTERNAL_STORAGE_PERMISSION_CODE = 23;
+    public static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+    };
+    public String LOG_perm = "permission";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +61,27 @@ public class WhileSleeping extends AppCompatActivity {
         String date = sdf.format(c.getTime());
         String startTime = timef.format(c.getTime());
 
-        Log.i(LOG_WhileSleeping, "The storage directory is at:" + this.path);
+        MainActivity.context = getApplicationContext();
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                EXTERNAL_STORAGE_PERMISSION_CODE);
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+                requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        Log.d(LOG_perm,"Permission granted: " + PackageManager.PERMISSION_GRANTED);
+        Log.d(LOG_perm,"Media mounted: " + Environment.MEDIA_MOUNTED);
         OurThreads t1 = new OurThreads("txt_reading");
         //"setOnClickListener" run if the specified button is clicked.
         //Due to having two different button and different actions for each one,it is used.

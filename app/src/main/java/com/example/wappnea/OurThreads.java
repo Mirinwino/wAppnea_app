@@ -1,11 +1,25 @@
 package com.example.wappnea;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
+import android.content.Intent;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class OurThreads extends WhileSleeping implements Runnable{
@@ -15,6 +29,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
     private String threadName;
     Thread thread;
     public double[][] abDataValues;
+
 
     OurThreads(String theName){
         threadName = theName;
@@ -26,13 +41,13 @@ public class OurThreads extends WhileSleeping implements Runnable{
     // execution of thread starts from run() method
     public void run()
     {
-
-        FileInputStream fIn = null;
-        File file = new File(path, this.fileName);
-        Log.d(LOG_Thread, file.getAbsolutePath());
         String ret = "";
         try {
-            fIn = new FileInputStream(file);
+            //String path = MainActivity.context.getFilesDir().toString();  //for internal storage
+            File[] Dirs = ContextCompat.getExternalFilesDirs(MainActivity.context, null);
+            File file = new File(Dirs[1],fileName); ///note: if u do not have sdcard chose 0, if u have chose 1
+            FileInputStream fIn= new FileInputStream(file);
+            //InputStream fIn=MainActivity.context.getResources().getAssets().open(fileName); //for internal storage
             InputStreamReader isr = new InputStreamReader(fIn);
             BufferedReader bufferedReader = new BufferedReader(isr);
             String receiveString = "";
@@ -53,7 +68,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
             Log.d(LOG_Thread,"The reading ends");
             exit();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             // TODO Auto-generated catch block
             Log.d(LOG_Thread, e.getMessage());
             e.printStackTrace();
@@ -61,10 +76,10 @@ public class OurThreads extends WhileSleeping implements Runnable{
         Log.d(LOG_Thread, endThread + " Stopped.");
     }
 
+
     boolean isStopped() {
         return endThread;
     }
-
     // for stopping the thread
     public double[][] exit()
     {
@@ -78,17 +93,5 @@ public class OurThreads extends WhileSleeping implements Runnable{
             }
         }
         return abDataValues;
-    }
-
-    public void ReadTxtFile() {
-        //int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        //if (permissionCheck== PackageManager.PERMISSION_DENIED){
-        //    requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},PackageManager.PERMISSION_GRANTED);
-        //}
-        //requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
-        //Log.d(LOG_TAG,"Permission granted: " + (permissionCheck == PackageManager.PERMISSION_GRANTED));
-        //Log.d(LOG_TAG,"Media mounted: " + Environment.MEDIA_MOUNTED);
-
-
     }
 }
