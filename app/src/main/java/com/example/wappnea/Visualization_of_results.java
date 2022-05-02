@@ -51,13 +51,7 @@ public class Visualization_of_results extends AppCompatActivity {
 
         // Start plot definition -------------------------------------------------------------------
         tvX = findViewById(R.id.tvXMax);
-        //tvY = findViewById(R.id.tvYMax);
-
         seekBarX = findViewById(R.id.seekBar1);
-        //seekBarX.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener) this);
-
-        //seekBarY = findViewById(R.id.seekBar2);
-        //seekBarY.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener) this);
 
         chart = findViewById(R.id.chart1);
         //chart.setOnChartValueSelectedListener((OnChartValueSelectedListener) this);
@@ -74,13 +68,10 @@ public class Visualization_of_results extends AppCompatActivity {
         chart.setDrawGridBackground(false);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        chart.setPinchZoom(false);
+        chart.setPinchZoom(true);
 
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);
-
-        // if more than 60 entries are displayed in the chart, no values will be drawn
-        chart.setMaxVisibleValueCount(60);
 
         // add empty data
         chart.setData(data);
@@ -99,16 +90,16 @@ public class Visualization_of_results extends AppCompatActivity {
         xl.setEnabled(true);
 
         YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.DKGRAY);
         leftAxis.setAxisMaximum(6f);
         leftAxis.setAxisMinimum(-6f);
         leftAxis.setDrawGridLines(true);
 
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
-        rightAxis.setTextColor(Color.WHITE);
-        rightAxis.setAxisMaximum(3f);
-        rightAxis.setAxisMinimum(-3f);
+        rightAxis.setTextColor(Color.DKGRAY);
+        rightAxis.setAxisMaximum(2f);
+        rightAxis.setAxisMinimum(-2f);
         rightAxis.setDrawGridLines(true);
 
         setData(WhileSleeping.abData.size());
@@ -137,13 +128,10 @@ public class Visualization_of_results extends AppCompatActivity {
 
         set1.setAxisDependency(AxisDependency.LEFT);
         set1.setColor(ColorTemplate.getHoloBlue());
-        set1.setCircleColor(Color.WHITE);
         set1.setLineWidth(2f);
-        set1.setCircleRadius(0f);
         set1.setFillAlpha(65);
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
-        set1.setDrawCircleHole(false);
         set1.setDrawCircles(false);
         //set1.setFillFormatter(new MyFillFormatter(0f));
         //set1.setDrawHorizontalHighlightIndicator(false);
@@ -157,12 +145,9 @@ public class Visualization_of_results extends AppCompatActivity {
         set2.setAxisDependency(AxisDependency.RIGHT);
         set2.setColor(Color.RED);
         set2.setDrawCircles(false);
-        //set2.setCircleColor(Color.WHITE);
         set2.setLineWidth(2f);
-        set2.setCircleRadius(0f);
         set2.setFillAlpha(65);
         set2.setFillColor(Color.RED);
-        set2.setDrawCircleHole(false);
         set2.setHighLightColor(Color.rgb(244, 117, 117));
         //set2.setFillFormatter(new MyFillFormatter(900f));
         //end definition set2 ----------------------------------------------------------------------
@@ -175,7 +160,6 @@ public class Visualization_of_results extends AppCompatActivity {
         // set data
         chart.setData(data);
     }
-
 
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
