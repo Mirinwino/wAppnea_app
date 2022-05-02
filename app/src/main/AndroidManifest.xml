@@ -22,6 +22,9 @@
             android:name=".WhileSleeping"
             android:exported="false" />
         <activity
+            android:name=".Visualization_of_results"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

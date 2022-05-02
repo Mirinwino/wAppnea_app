@@ -7,11 +7,16 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import android.Manifest;
@@ -25,6 +30,22 @@ import android.view.View;
 import android.widget.Button;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendForm;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.YAxis.AxisDependency;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.example.wappnea.DemoBase;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -37,8 +58,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
-public class WhileSleeping extends AppCompatActivity {
-    private Button button_2;
+public class WhileSleeping extends AppCompatActivity{
+
+    private Button btn_WakeUp;
+    private LineChart chart;
+
     public ArrayList<Double> abData = new ArrayList<Double>();
     public double[][] windows;
     double[][] features;
@@ -50,10 +74,63 @@ public class WhileSleeping extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
     };
     public String LOG_perm = "permission";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_while_sleeping);
+
+        setTitle("Input data");
+
+        // Start plot definition -------------------------------------------------------------------
+        chart = findViewById(R.id.plotWhileSleep);
+
+        // set an alternative background color
+        chart.setBackgroundColor(Color.LTGRAY);
+        // enable description text
+        chart.getDescription().setEnabled(true);
+
+        // enable touch gestures, scaling and dragging
+        chart.setTouchEnabled(true);
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+        chart.setDrawGridBackground(false);
+
+        // if disabled, scaling can be done on x- and y-axis separately
+        chart.setPinchZoom(true);
+
+        LineData data = new LineData();
+        data.setValueTextColor(Color.WHITE);
+
+        // add empty data
+        chart.setData(data);
+
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+
+        // modify the legend ...
+        l.setForm(LegendForm.LINE);
+        l.setTextColor(Color.WHITE);
+
+        XAxis xl = chart.getXAxis();
+        xl.setTextColor(Color.WHITE);
+        xl.setDrawGridLines(false);
+        xl.setAvoidFirstLastClipping(true);
+        xl.setEnabled(true);
+
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setAxisMaximum(100f);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawGridLines(true);
+
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        addEntry();
+
+        // End plot definition ---------------------------------------------------------------------
+
         // define date and time format and get current date and time
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timef = new SimpleDateFormat("HH:mm:ss");
@@ -80,13 +157,15 @@ public class WhileSleeping extends AppCompatActivity {
                 // result of the request.
             }
         }
+
         Log.d(LOG_perm,"Permission granted: " + PackageManager.PERMISSION_GRANTED);
         Log.d(LOG_perm,"Media mounted: " + Environment.MEDIA_MOUNTED);
+
         OurThreads t1 = new OurThreads("txt_reading");
+
         //"setOnClickListener" run if the specified button is clicked.
-        //Due to having two different button and different actions for each one,it is used.
-        button_2 = (Button) findViewById(R.id.btnStopSleep);
-        button_2.setOnClickListener(new View.OnClickListener() {
+        btn_WakeUp = findViewById(R.id.btnStopSleep);
+        btn_WakeUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 // The application goes to summary screen.
@@ -132,7 +211,7 @@ public class WhileSleeping extends AppCompatActivity {
                             }
                         }
                     }
-                    Log.d(LOG_WhileSleeping,"Value: " + numApp);
+                    Log.d(LOG_WhileSleeping,"Value num app: " + numApp);
 
                     Intent intent_2 = new Intent(WhileSleeping.this, NightSummary.class);
 
@@ -198,6 +277,7 @@ public class WhileSleeping extends AppCompatActivity {
 
         return result;
     }
+
     //https://www.geeksforgeeks.org/java-program-to-calculate-standard-deviation/
     private static double std(double[] dataWindow){
         double standardDeviation = 0.0;
@@ -298,4 +378,51 @@ public class WhileSleeping extends AppCompatActivity {
         return  estimated_class;
     }
 
+
+    private void addEntry() {
+        LineData data = chart.getData();
+
+        ILineDataSet set = data.getDataSetByIndex(0);
+        // set.addEntry(...); // can be called as well
+        set = createSet();
+        data.addDataSet(set);
+
+        for (int i = 0; i < abData.size(); i++) {
+            data.addEntry(new Entry(set.getEntryCount(), i), 0);
+        }
+
+        //data.addEntry(new Entry(set.getEntryCount(), (float) (Math.random() * 40) + 30f), 0);
+        data.notifyDataChanged();
+
+        // let the chart know it's data has changed
+        chart.notifyDataSetChanged();
+
+        // limit the number of visible entries
+        chart.setVisibleXRangeMaximum(60);
+        // chart.setVisibleYRange(30, AxisDependency.LEFT);
+
+        // move to the latest entry
+        chart.moveViewToX(data.getEntryCount());
+
+        // this automatically refreshes the chart (calls invalidate())
+        //chart.moveViewTo(data.getXValCount()-7, 55f,AxisDependency.LEFT);
+
+    }
+
+    // Edit the set view
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, "abdominal belt");
+        set.setAxisDependency(AxisDependency.LEFT);
+        set.setColor(ColorTemplate.getHoloBlue());
+        set.setCircleColor(Color.WHITE);
+        set.setLineWidth(2f);
+        set.setCircleRadius(4f);
+        set.setFillAlpha(65);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(9f);
+        set.setDrawValues(false);
+        return set;
+    }
 }

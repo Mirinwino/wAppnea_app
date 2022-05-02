@@ -24,15 +24,19 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+// Chart
+
+
 public class MainActivity extends AppCompatActivity {
     public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button button_1 = findViewById(R.id.btnStartSleep);
+        Button btn_StartSleep = findViewById(R.id.btnStartSleep);
 
-        button_1.setOnClickListener(new View.OnClickListener() {
+        btn_StartSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openWhileSleeping();

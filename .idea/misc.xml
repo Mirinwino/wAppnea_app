@@ -3,12 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.17291666666666666" />
         <entry key="..\:/Users/gizem/Desktop/PortableHealthTech/wAppnea_app/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/gizem/Desktop/PortableHealthTech/wAppnea_app/app/src/main/res/layout/activity_night_summary.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/gizem/Desktop/PortableHealthTech/wAppnea_app/app/src/main/res/layout/activity_while_sleeping.xml" value="0.25416666666666665" />
+        <entry key="app/src/main/res/layout/activity_log_in.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_night_summary.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_while_sleeping.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/activity_night_summary.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_visualization_of_results.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_while_sleeping.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/bar.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/bubble.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/candle.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/combined.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/draw.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/dynamical.xml" value="0.22604166666666667" />
+        <entry key="app/src/main/res/menu/line.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/main.xml" value="0.22604166666666667" />
+        <entry key="app/src/main/res/menu/only_github.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/pie.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/radar.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/realtime.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/scatter.xml" value="0.23489583333333333" />
       </map>
     </option>
   </component>
@@ -17,5 +33,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.22" />
+      </ProjectState>
+    </option>
   </component>
 </project>

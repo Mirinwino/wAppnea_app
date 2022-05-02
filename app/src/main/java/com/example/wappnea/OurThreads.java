@@ -15,6 +15,10 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,10 +28,12 @@ import java.io.InputStreamReader;
 
 public class OurThreads extends WhileSleeping implements Runnable{
     public String LOG_Thread = "thread";
+
     private final String fileName = "abdoData22.txt";
     private boolean endThread;
     private String threadName;
     Thread thread;
+
     public double[][] abDataValues;
 
 
@@ -55,7 +61,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 try {
                     if(endThread==false){
                         abData.add(Double.parseDouble(receiveString));
-                        //Log.d(LOG_Thread,"Value: " + receiveString);
+                        //Log.d(LOG_Thread,"Value receive String: " + receiveString);
                         //Thread.sleep(25);
                     }
                     else{
@@ -94,4 +100,5 @@ public class OurThreads extends WhileSleeping implements Runnable{
         }
         return abDataValues;
     }
+
 }

@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
-public class NightSummary extends AppCompatActivity {
-    private Button button_3;
+public class NightSummary extends AppCompatActivity{
+    private Button btn_Plots, btnBackHome1;
 
     TextView dateObj, startTimeObj, endTimeObj, durationObj, AHIObj;
 
@@ -45,19 +45,23 @@ public class NightSummary extends AppCompatActivity {
         durationObj.setText(durationTime);
         AHIObj.setText((AHIString));
 
-
-        button_3 = (Button) findViewById(R.id.btnBackHome);
-        button_3.setOnClickListener(new View.OnClickListener() {
+        btnBackHome1 = findViewById(R.id.btnBackHome1);
+        btnBackHome1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMainActivity();
+                Intent intent_plot = new Intent(NightSummary.this, MainActivity.class);
+                startActivity(intent_plot);
             }
         });
-    }
 
-    public void openMainActivity() {
-        Intent intent_3 = new Intent(this, MainActivity.class);
-        startActivity(intent_3);
+        btn_Plots = findViewById(R.id.btnPlots);
+        btn_Plots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_plot = new Intent(NightSummary.this, Visualization_of_results.class);
+                startActivity(intent_plot);
+            }
+        });
     }
 
     private void initializeView() {

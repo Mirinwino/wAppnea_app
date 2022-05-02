@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/actionAdd"
+        android:title="actionAddEntry">
+    </item>
+    <item
+        android:id="@+id/actionClear"
+        android:title="actionClearChart">
+    </item>
+    <item
+        android:id="@+id/actionFeedMultiple"
+        android:title="actionFeedMultiple">
+    </item>
+    <item
+        android:id="@+id/actionSave"
+        android:title="actionSave">
+    </item>
+
+</menu>

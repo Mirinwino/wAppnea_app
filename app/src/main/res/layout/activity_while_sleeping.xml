@@ -11,7 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="335dp"
         android:layout_height="wrap_content"
-        android:text="WWWAppnea is studying your sleep to detect apnea episodes. \n \n         Press “wake up” when you wake up to finish the study and obtain your summary results"
+        android:text="wAppnea is studying your sleep to detect apnea episodes.\n \n Press “wake up” when you wake up to finish the study and obtain your summary results"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#F44336"
@@ -21,7 +21,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.15" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/plotWhileSleep"
+        android:layout_width="360dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.1"/>
 
     <Button
         android:id="@+id/btnStopSleep"
@@ -36,6 +47,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/plotWhileSleep"
+        app:layout_constraintVertical_bias="0.3"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

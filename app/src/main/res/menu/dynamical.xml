@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/actionAddEntry"
+        android:title="actionAddEntry">
+    </item>
+    <item
+        android:id="@+id/actionRemoveEntry"
+        android:title="actionRemoveEntry">
+    </item>
+    <item
+        android:id="@+id/actionAddDataSet"
+        android:title="actionAddDataSet">
+    </item>
+    <item
+        android:id="@+id/actionRemoveDataSet"
+        android:title="actionRemoveDataSet">
+    </item>
+    <item
+        android:id="@+id/actionClear"
+        android:title="actionClearChart">
+    </item>
+    <item
+        android:id="@+id/actionSave"
+        android:title="actionSave">
+    </item>
+
+</menu>
