@@ -61,7 +61,8 @@ import java.util.Locale;
 public class WhileSleeping extends AppCompatActivity{
 
     private Button btn_WakeUp;
-    private LineChart chart;
+
+    public static LineChart Live_chart;
 
     //variable for the plot
     public static ArrayList<Entry> values2 = new ArrayList<>();
@@ -86,48 +87,48 @@ public class WhileSleeping extends AppCompatActivity{
 
         setTitle("Input data");
         // Start plot definition -------------------------------------------------------------------
-        chart = findViewById(R.id.plotWhileSleep);
+        Live_chart = findViewById(R.id.plotWhileSleep);
 
         // set an alternative background color
-        chart.setBackgroundColor(Color.LTGRAY);
+        Live_chart.setBackgroundColor(Color.DKGRAY);
         // enable description text
-        chart.getDescription().setEnabled(true);
+        Live_chart.getDescription().setEnabled(true);
 
         // enable touch gestures, scaling and dragging
-        chart.setTouchEnabled(true);
-        chart.setDragEnabled(true);
-        chart.setScaleEnabled(true);
-        chart.setDrawGridBackground(false);
+        Live_chart.setTouchEnabled(true);
+        Live_chart.setDragEnabled(true);
+        Live_chart.setScaleEnabled(true);
+        Live_chart.setDrawGridBackground(false);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        chart.setPinchZoom(true);
+        Live_chart.setPinchZoom(false);
 
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);
 
         // add empty data
-        chart.setData(data);
+        Live_chart.setData(data);
 
         // get the legend (only possible after setting data)
-        Legend l = chart.getLegend();
+        Legend l = Live_chart.getLegend();
 
         // modify the legend ...
         l.setForm(LegendForm.LINE);
         l.setTextColor(Color.WHITE);
 
-        XAxis xl = chart.getXAxis();
+        XAxis xl = Live_chart.getXAxis();
         xl.setTextColor(Color.WHITE);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
         xl.setEnabled(true);
 
-        YAxis leftAxis = chart.getAxisLeft();
+        YAxis leftAxis = Live_chart.getAxisLeft();
         leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMaximum(100f);
-        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMaximum(6f);
+        leftAxis.setAxisMinimum(-6f);
         leftAxis.setDrawGridLines(true);
 
-        YAxis rightAxis = chart.getAxisRight();
+        YAxis rightAxis = Live_chart.getAxisRight();
         rightAxis.setEnabled(false);
         // End plot definition ---------------------------------------------------------------------
 
@@ -387,50 +388,8 @@ public class WhileSleeping extends AppCompatActivity{
     }
 
 
-    private void addEntry() {
-        LineData data = chart.getData();
-
-        ILineDataSet set = data.getDataSetByIndex(0);
-        // set.addEntry(...); // can be called as well
-        set = createSet();
-        data.addDataSet(set);
-
-        for (int i = 0; i < abData.size(); i++) {
-            data.addEntry(new Entry(set.getEntryCount(), i), 0);
-        }
-
-        //data.addEntry(new Entry(set.getEntryCount(), (float) (Math.random() * 40) + 30f), 0);
-        data.notifyDataChanged();
-
-        // let the chart know it's data has changed
-        chart.notifyDataSetChanged();
-
-        // limit the number of visible entries
-        chart.setVisibleXRangeMaximum(60);
-        // chart.setVisibleYRange(30, AxisDependency.LEFT);
-
-        // move to the latest entry
-        chart.moveViewToX(data.getEntryCount());
-
-        // this automatically refreshes the chart (calls invalidate())
-        //chart.moveViewTo(data.getXValCount()-7, 55f,AxisDependency.LEFT);
-
-    }
-
     // Edit the set view
-    private LineDataSet createSet() {
-        LineDataSet set = new LineDataSet(null, "abdominal belt");
-        set.setAxisDependency(AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.WHITE);
-        set.setLineWidth(2f);
-        set.setCircleRadius(4f);
-        set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.rgb(244, 117, 117));
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(9f);
-        set.setDrawValues(false);
-        return set;
-    }
+
+
+
 }

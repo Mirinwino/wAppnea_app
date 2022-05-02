@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -16,6 +17,20 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendForm;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.YAxis.AxisDependency;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.example.wappnea.DemoBase;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,6 +75,12 @@ public class OurThreads extends WhileSleeping implements Runnable{
                     if(endThread==false){
                         abData.add(Double.parseDouble(receiveString));
 
+                        // FOR PLOT ----------------------------------------------------------------
+                        addEntry(Double.parseDouble(receiveString));
+                        Thread.sleep(50);
+                        // FOR PLOT ----------------------------------------------------------------
+
+
                         //Log.d(LOG_Thread,"Value receive String: " + receiveString);
                         //Thread.sleep(25);
                     }
@@ -81,6 +102,59 @@ public class OurThreads extends WhileSleeping implements Runnable{
         Log.d(LOG_Thread, endThread + " Stopped.");
     }
 
+    // FOR PLOT ------------------------------------------------------------------------------------
+    private void addEntry(double inputData) {
+        LineData data = Live_chart.getData();
+        if (data != null) {
+
+            ILineDataSet set = data.getDataSetByIndex(0);
+            //set.addEntry(...); // can be called as well
+
+            if (set == null) {
+                set = createSet();
+                data.addDataSet(set);
+            }
+
+            try {
+                float f = (float)inputData;
+
+                data.addEntry(new Entry(set.getEntryCount(), f), 0);
+                data.notifyDataChanged();
+
+                // let the chart know it's data has changed
+                Live_chart.notifyDataSetChanged();
+
+                // limit the number of visible entries
+                Live_chart.setVisibleXRangeMaximum(2400);
+                //Live_chart.setVisibleYRange(30, AxisDependency.LEFT);
+
+                // move to the latest entry
+                Live_chart.moveViewToX(data.getEntryCount());
+
+            }catch(Exception e){
+                Log.d(LOG_Thread, e.getMessage()+"plot error");
+            }
+
+
+        }
+
+    }
+
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, "abdominal belt");
+        set.setAxisDependency(AxisDependency.LEFT);
+        set.setColor(Color.YELLOW);
+        set.setDrawCircles(false);
+        set.setLineWidth(2f);
+        set.setFillAlpha(65);
+        set.setFillColor(Color.YELLOW);
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(9f);
+        set.setDrawValues(false);
+        return set;
+    }
+    // FOR PLOT ------------------------------------------------------------------------------------
 
     boolean isStopped() {
         return endThread;

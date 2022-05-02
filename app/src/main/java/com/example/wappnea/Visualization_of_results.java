@@ -1,7 +1,12 @@
 package com.example.wappnea;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -9,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -28,8 +35,12 @@ import com.example.wappnea.DemoBase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Visualization_of_results extends AppCompatActivity {
+
+public class Visualization_of_results extends AppCompatActivity implements OnSeekBarChangeListener,
+        OnChartValueSelectedListener {
+//public class Visualization_of_results extends AppCompatActivity {
     private LineChart chart;
     private SeekBar seekBarX, seekBarY;
     private TextView tvX, tvY;
@@ -52,6 +63,7 @@ public class Visualization_of_results extends AppCompatActivity {
         // Start plot definition -------------------------------------------------------------------
         tvX = findViewById(R.id.tvXMax);
         seekBarX = findViewById(R.id.seekBar1);
+        seekBarX.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener) this);
 
         chart = findViewById(R.id.chart1);
         //chart.setOnChartValueSelectedListener((OnChartValueSelectedListener) this);
@@ -68,7 +80,7 @@ public class Visualization_of_results extends AppCompatActivity {
         chart.setDrawGridBackground(false);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        chart.setPinchZoom(true);
+        chart.setPinchZoom(false);
 
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);
@@ -81,7 +93,7 @@ public class Visualization_of_results extends AppCompatActivity {
 
         // modify the legend ...
         l.setForm(Legend.LegendForm.LINE);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.DKGRAY);
 
         XAxis xl = chart.getXAxis();
         xl.setTextColor(Color.WHITE);
@@ -103,15 +115,24 @@ public class Visualization_of_results extends AppCompatActivity {
         rightAxis.setDrawGridLines(true);
 
         setData(WhileSleeping.abData.size());
-        // End plot definition ---------------------------------------------------------------------
 
+        // limit the number of visible entries
+        chart.setVisibleXRangeMaximum(2400*5); //limit to 5min
+        //chart.setVisibleYRange(30, AxisDependency.LEFT);
+
+        // move to the latest entry
+        chart.moveViewToX(data.getEntryCount());
+
+        // End plot definition ---------------------------------------------------------------------
     }
+
 
     private void setData(int count){
         // set1 = dataset with the abdominal belt signal (abData)
         // set2 = set with the results of apnea prediction (apneafilter)
 
         ArrayList<Entry> values1 = new ArrayList<>();
+        ArrayList<Entry> values3 = new ArrayList<>();
         //ArrayList<Entry> values2 = new ArrayList<>(); //defined in WhileSleeping.java
 
         // We need to create ArrayList<Entry> from the ArrayList<Double> that is abData
@@ -121,11 +142,17 @@ public class Visualization_of_results extends AppCompatActivity {
             values1.add(new Entry(i, f));
         }
 
+        for (int i = 0; i < count; i++) {
+            values3.add(WhileSleeping.values2.get(i));
+        }
+
         LineDataSet set1, set2;
 
-        //start definition set1 --------------------------------------------------------------------
+        // create a dataset and give it a type
         set1 = new LineDataSet(values1, "Abdominal signal");
+        set2 = new LineDataSet(values3, "Apnea detection");
 
+        //start definition set1 --------------------------------------------------------------------
         set1.setAxisDependency(AxisDependency.LEFT);
         set1.setColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(2f);
@@ -140,8 +167,6 @@ public class Visualization_of_results extends AppCompatActivity {
         //end definition set1 ----------------------------------------------------------------------
 
         //start definition set2 --------------------------------------------------------------------
-        // create a dataset and give it a type
-        set2 = new LineDataSet(WhileSleeping.values2, "Apnea detection");
         set2.setAxisDependency(AxisDependency.RIGHT);
         set2.setColor(Color.RED);
         set2.setDrawCircles(false);
@@ -154,19 +179,21 @@ public class Visualization_of_results extends AppCompatActivity {
 
         // create a data object with the data sets
         LineData data = new LineData(set1, set2);
-        data.setValueTextColor(Color.WHITE);
+        data.setValueTextColor(Color.LTGRAY);
         data.setValueTextSize(9f);
 
         // set data
         chart.setData(data);
     }
 
+    @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
         tvX.setText(String.valueOf(seekBarX.getProgress()));
-        //tvY.setText(String.valueOf(seekBarY.getProgress()));
 
-        setData(seekBarX.getProgress());
+        int value_progress = (seekBarX.getProgress() * WhileSleeping.abData.size()/100);
+
+        setData(value_progress);
 
         // redraw
         chart.invalidate();
@@ -174,13 +201,173 @@ public class Visualization_of_results extends AppCompatActivity {
 
     // BACK FROM TOP MENU --------------------------------------------------------------------------
     // this event will enable the back function to the button on press
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                this.finish();
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.line, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return true;
+
+            case R.id.actionToggleValues: {
+                List<ILineDataSet> sets = chart.getData()
+                        .getDataSets();
+
+                for (ILineDataSet iSet : sets) {
+
+                    LineDataSet set = (LineDataSet) iSet;
+                    set.setDrawValues(!set.isDrawValuesEnabled());
+                }
+
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionToggleHighlight: {
+                if (chart.getData() != null) {
+                    chart.getData().setHighlightEnabled(!chart.getData().isHighlightEnabled());
+                    chart.invalidate();
+                }
+                break;
+            }
+            case R.id.actionToggleFilled: {
+
+                List<ILineDataSet> sets = chart.getData()
+                        .getDataSets();
+
+                for (ILineDataSet iSet : sets) {
+
+                    LineDataSet set = (LineDataSet) iSet;
+                    if (set.isDrawFilledEnabled())
+                        set.setDrawFilled(false);
+                    else
+                        set.setDrawFilled(true);
+                }
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionToggleCircles: {
+                List<ILineDataSet> sets = chart.getData()
+                        .getDataSets();
+
+                for (ILineDataSet iSet : sets) {
+
+                    LineDataSet set = (LineDataSet) iSet;
+                    if (set.isDrawCirclesEnabled())
+                        set.setDrawCircles(false);
+                    else
+                        set.setDrawCircles(true);
+                }
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionToggleCubic: {
+                List<ILineDataSet> sets = chart.getData()
+                        .getDataSets();
+
+                for (ILineDataSet iSet : sets) {
+
+                    LineDataSet set = (LineDataSet) iSet;
+                    set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
+                            ? LineDataSet.Mode.LINEAR
+                            : LineDataSet.Mode.CUBIC_BEZIER);
+                }
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionToggleStepped: {
+                List<ILineDataSet> sets = chart.getData()
+                        .getDataSets();
+
+                for (ILineDataSet iSet : sets) {
+
+                    LineDataSet set = (LineDataSet) iSet;
+                    set.setMode(set.getMode() == LineDataSet.Mode.STEPPED
+                            ? LineDataSet.Mode.LINEAR
+                            : LineDataSet.Mode.STEPPED);
+                }
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionToggleHorizontalCubic: {
+                List<ILineDataSet> sets = chart.getData()
+                        .getDataSets();
+
+                for (ILineDataSet iSet : sets) {
+
+                    LineDataSet set = (LineDataSet) iSet;
+                    set.setMode(set.getMode() == LineDataSet.Mode.HORIZONTAL_BEZIER
+                            ? LineDataSet.Mode.LINEAR
+                            : LineDataSet.Mode.HORIZONTAL_BEZIER);
+                }
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionTogglePinch: {
+                if (chart.isPinchZoomEnabled())
+                    chart.setPinchZoom(false);
+                else
+                    chart.setPinchZoom(true);
+
+                chart.invalidate();
+                break;
+            }
+            case R.id.actionToggleAutoScaleMinMax: {
+                chart.setAutoScaleMinMaxEnabled(!chart.isAutoScaleMinMaxEnabled());
+                chart.notifyDataSetChanged();
+                break;
+            }
+            case R.id.animateX: {
+                chart.animateX(2000);
+                break;
+            }
+            case R.id.animateY: {
+                chart.animateY(2000);
+                break;
+            }
+            case R.id.animateXY: {
+                chart.animateXY(2000, 2000);
+                break;
+            }
         }
+        //return true;
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+
+    }
+
+    @Override
+    public void onNothingSelected() {
+
     }
 }
