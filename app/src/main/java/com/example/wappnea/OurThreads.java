@@ -46,7 +46,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
     private boolean endThread;
     private String threadName;
     Thread thread;
-
+    public static int plottingflag;
     public double[][] abDataValues;
 
 
@@ -74,23 +74,45 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 try {
                     if(endThread==false){
                         abData.add(Double.parseDouble(receiveString));
-
                         // FOR PLOT ----------------------------------------------------------------
-                        addEntry(Double.parseDouble(receiveString));
-                        Thread.sleep(50);
+                        //addEntry(Double.parseDouble(receiveString));
+                        //Thread.sleep(50);
                         // FOR PLOT ----------------------------------------------------------------
-
-
                         //Log.d(LOG_Thread,"Value receive String: " + receiveString);
                         //Thread.sleep(25);
                     }
                     else{
                         isr.close();
+                        plottingflag=1;
                     }
                 }catch(Exception e){
                     Log.d(LOG_Thread, e.getMessage());
                 }
             }
+            isr.close();
+            plottingflag=1;
+            new Thread(new Runnable() {
+                public int k;
+                @Override
+                public void run() {
+                    while(plottingflag==1){
+                        for (k = 0; k < abData.size(); k++) {
+                            // Don't generate garbage runnables inside the loop.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addEntry(abData.get(k));
+                                }
+                            });
+                            try {
+                                Thread.sleep(25);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }).start();
             Log.d(LOG_Thread,"The reading ends");
             exit();
         }
@@ -106,7 +128,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
     private void addEntry(double inputData) {
         LineData data = Live_chart.getData();
         if (data != null) {
-
+            try {
             ILineDataSet set = data.getDataSetByIndex(0);
             //set.addEntry(...); // can be called as well
 
@@ -115,27 +137,25 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 data.addDataSet(set);
             }
 
-            try {
-                float f = (float)inputData;
+            float f = (float)inputData;
 
-                data.addEntry(new Entry(set.getEntryCount(), f), 0);
-                data.notifyDataChanged();
+            data.addEntry(new Entry(set.getEntryCount(), f),0);
+            //data.notifyDataChanged();
 
-                // let the chart know it's data has changed
-                Live_chart.notifyDataSetChanged();
+            // let the chart know it's data has changed
+            Live_chart.notifyDataSetChanged();
 
-                // limit the number of visible entries
-                Live_chart.setVisibleXRangeMaximum(2400);
-                //Live_chart.setVisibleYRange(30, AxisDependency.LEFT);
+            // limit the number of visible entries
+            //Live_chart.setVisibleXRangeMaximum(2400);
+            //Live_chart.setVisibleYRange(30, AxisDependency.LEFT);
+            Live_chart.setVisibleXRange(200,400);
 
-                // move to the latest entry
-                Live_chart.moveViewToX(data.getEntryCount());
+            // move to the latest entry
+            Live_chart.moveViewToX(data.getEntryCount());
 
             }catch(Exception e){
                 Log.d(LOG_Thread, e.getMessage()+"plot error");
             }
-
-
         }
 
     }

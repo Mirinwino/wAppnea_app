@@ -174,9 +174,11 @@ public class WhileSleeping extends AppCompatActivity{
                     int numApp=0;
                     if(t1.isStopped()==false){
                         windows=t1.exit();
+                        OurThreads.plottingflag=0;
                     }
                     else{
                         windows= t1.abDataValues;
+                        OurThreads.plottingflag=0;
                     }
                     double apneaFilter[]=new double[windows.length*40];
                     features=extract_feature(windows);
