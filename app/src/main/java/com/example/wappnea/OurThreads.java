@@ -16,8 +16,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.Highlight;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,6 +59,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 try {
                     if(endThread==false){
                         abData.add(Double.parseDouble(receiveString));
+
                         //Log.d(LOG_Thread,"Value receive String: " + receiveString);
                         //Thread.sleep(25);
                     }

@@ -63,7 +63,11 @@ public class WhileSleeping extends AppCompatActivity{
     private Button btn_WakeUp;
     private LineChart chart;
 
-    public ArrayList<Double> abData = new ArrayList<Double>();
+    //variable for the plot
+    public static ArrayList<Entry> values2 = new ArrayList<>();
+
+    public static ArrayList<Double> abData = new ArrayList<Double>();
+    public double apneaFilter[];
     public double[][] windows;
     double[][] features;
     public String LOG_WhileSleeping = "whileSleeping";
@@ -81,7 +85,6 @@ public class WhileSleeping extends AppCompatActivity{
         setContentView(R.layout.activity_while_sleeping);
 
         setTitle("Input data");
-
         // Start plot definition -------------------------------------------------------------------
         chart = findViewById(R.id.plotWhileSleep);
 
@@ -126,9 +129,6 @@ public class WhileSleeping extends AppCompatActivity{
 
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
-
-        addEntry();
-
         // End plot definition ---------------------------------------------------------------------
 
         // define date and time format and get current date and time
@@ -211,8 +211,16 @@ public class WhileSleeping extends AppCompatActivity{
                             }
                         }
                     }
+
+                    for (int i = 0; i < apneaFilter.length; i++) {
+                        double val = apneaFilter[i];
+                        float f = (float)val;
+                        values2.add(new Entry(i, f));
+                    }
+
                     Log.d(LOG_WhileSleeping,"Value num app: " + numApp);
 
+                    // go to night summary activity
                     Intent intent_2 = new Intent(WhileSleeping.this, NightSummary.class);
 
                     //calculate end time and duration based on number of samples acquired
