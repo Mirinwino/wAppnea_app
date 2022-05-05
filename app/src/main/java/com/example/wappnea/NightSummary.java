@@ -30,10 +30,11 @@ public class NightSummary extends AppCompatActivity{
         String endTime = info.getString("label_endTime");
         int numEvents = info.getInt("label_numEvents");
 
-        SimpleDateFormat timef = new SimpleDateFormat("HH:mm:ss");
-        Calendar c3 = Calendar.getInstance();
-        c3.setTimeInMillis(durationMill-3600000);
-        String durationTime = timef.format(c3.getTime());
+        int seconds = (int) (durationMill / 1000) % 60 ;
+        int minutes = (int) ((durationMill / (1000*60)) % 60);
+        int hours   = (int) ((durationMill / (1000*60*60)) % 24);
+
+        String durationTime = ""+hours+"h "+minutes+"m "+seconds+"s";
 
         //AHI number of events per hour
         double durationHour = durationMill/(1000.0*60.0*60.0);
