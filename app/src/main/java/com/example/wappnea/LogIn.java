@@ -2,6 +2,7 @@ package com.example.wappnea;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -9,30 +10,45 @@ import android.view.View;
 import android.widget.Toast;
 
 //public class LogIn extends AppCompatActivity {
-public class LogIn extends AppCompatActivity implements View.OnClickListener {
+public class LogIn extends AppCompatActivity{
+
+    private Button BtLogIn1, BtLogIn2, BtLogIn3;
+
+    public static int LogInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        Button but1 = findViewById(R.id.BtLogIn1);
-        Button but2 = findViewById(R.id.BtLogIn2);
+        BtLogIn1 = findViewById(R.id.BtLogIn1);
+        BtLogIn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogInUser = 1;
+                Intent intent_plot = new Intent(LogIn.this, MainActivity.class);
+                startActivity(intent_plot);
+            }
+        });
 
-        but1.setOnClickListener(this);
-        but2.setOnClickListener(this);
-    }
+        BtLogIn2 = findViewById(R.id.BtLogIn2);
+        BtLogIn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogInUser = 2;
+                Intent intent_plot = new Intent(LogIn.this, MainActivity.class);
+                startActivity(intent_plot);
+            }
+        });
 
-    @Override
-    public void onClick(View v) {
-        Intent intent_LogIn = new Intent(LogIn.this, MainActivity.class);
-        switch (v.getId()) {
-            case R.id.BtLogIn1:
-                startActivity(intent_LogIn);
-                break;
-            case R.id.BtLogIn2:
-                startActivity(intent_LogIn);
-                break;
-        }
+        BtLogIn3 = findViewById(R.id.BtLogIn3);
+        BtLogIn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogInUser = 3;
+                Intent intent_plot = new Intent(LogIn.this, MainActivity.class);
+                startActivity(intent_plot);
+            }
+        });
     }
 }

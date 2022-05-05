@@ -42,8 +42,8 @@ import java.io.InputStreamReader;
 public class OurThreads extends WhileSleeping implements Runnable{
     public String LOG_Thread = "thread";
 
-    private final String fileName = "abdoData22.txt";
-    private final String fileNameLabels = "labels22.txt";
+    private String fileName = "";
+    private String fileNameLabels = "";
     private boolean endThread;
     private String threadName;
     Thread thread;
@@ -62,6 +62,25 @@ public class OurThreads extends WhileSleeping implements Runnable{
     // execution of thread starts from run() method
     public void run()
     {
+        switch (LogIn.LogInUser) {
+            case 1: {
+                fileName = "abdoData22.txt";
+                fileNameLabels = "labels22.txt";
+                break;
+            }
+            case 2: {
+                fileName = "abdoData25.txt";
+                fileNameLabels = "labels25.txt";
+                break;
+            }
+            case 3: {
+                fileName = "abdoData23.txt";
+                fileNameLabels = "labels23.txt";
+                break;
+            }
+        }
+
+
         String ret = "";
         try {
             //String path = MainActivity.context.getFilesDir().toString();  //for internal storage
