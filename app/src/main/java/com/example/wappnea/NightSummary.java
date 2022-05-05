@@ -51,9 +51,8 @@ public class NightSummary extends AppCompatActivity{
         btnBackHome1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_plot = new Intent(NightSummary.this, MainActivity.class);
+                Intent intent_plot = new Intent(NightSummary.this, LogIn.class);
                 startActivity(intent_plot);
-                ((Activity) MainActivity.context).finish();
             }
         });
 

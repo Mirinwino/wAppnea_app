@@ -47,7 +47,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
     private boolean endThread;
     private String threadName;
     Thread thread;
-    public static int plottingflag;
+    public static int plottingflag=1;
     public double[][] abDataValues;
     public double[][] labelsValues;
 
@@ -97,10 +97,8 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 try {
                     if(endThread==false){
                         abData.add(Double.parseDouble(receiveString));
-                        // FOR PLOT ----------------------------------------------------------------
-                        //addEntry(Double.parseDouble(receiveString));
-                        //Thread.sleep(50);
-                        // FOR PLOT ----------------------------------------------------------------
+
+
                         //Log.d(LOG_Thread,"Value receive String: " + receiveString);
                         //Thread.sleep(25);
                     }
@@ -137,31 +135,33 @@ public class OurThreads extends WhileSleeping implements Runnable{
             isrlabels.close();
             // end reading labels ------------------------------------------------------------------
 
-
-            plottingflag=1;
-            new Thread(new Runnable() {
-                public int k;
-                @Override
-                public void run() {
-                    while(plottingflag==1){
-                        for (k = 0; k < abData.size(); k++) {
-                            // Don't generate garbage runnables inside the loop.
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addEntry(abData.get(k));
+            if (endThread == false){
+                new Thread(new Runnable() {
+                    public int k;
+                    @Override
+                    public void run() {
+                        while(plottingflag==1){
+                            for (k = 0; k < abData.size(); k++) {
+                                // Don't generate garbage runnables inside the loop.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addEntry(abData.get(k));
+                                    }
+                                });
+                                try {
+                                    Thread.sleep(25);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                            try {
-                                Thread.sleep(25);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
                             }
                         }
                     }
-                }
-            }).start();
-
+                }).start();
+            }
+            else{
+                plottingflag=0;
+            }
 
 
             Log.d(LOG_Thread,"The reading ends");
