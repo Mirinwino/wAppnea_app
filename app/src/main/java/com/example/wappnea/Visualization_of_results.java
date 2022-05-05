@@ -51,7 +51,6 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualization_of_results);
-
         setTitle("Results");
 
         // calling the action bar

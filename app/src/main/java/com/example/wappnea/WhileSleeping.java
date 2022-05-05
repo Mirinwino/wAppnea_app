@@ -59,7 +59,6 @@ import java.io.InputStreamReader;
 import java.util.Locale;
 
 public class WhileSleeping extends AppCompatActivity{
-
     private Button btn_WakeUp;
 
     public static LineChart Live_chart;
@@ -242,8 +241,8 @@ public class WhileSleeping extends AppCompatActivity{
                     info.putInt("label_numEvents", numApp);
 
                     intent_2.putExtras(info);
-
                     startActivity(intent_2);
+                    finish();
                 }
                 catch (Exception e) {
                     Log.d(LOG_WhileSleeping,e.getMessage());
