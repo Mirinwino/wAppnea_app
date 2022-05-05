@@ -3,6 +3,7 @@ package com.example.wappnea;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,7 +12,7 @@ import android.widget.Toast;
 
 //public class LogIn extends AppCompatActivity {
 public class LogIn extends AppCompatActivity{
-
+    public static Context context_login;
     private Button BtLogIn1, BtLogIn2, BtLogIn3;
 
     public static int LogInUser;
@@ -20,7 +21,7 @@ public class LogIn extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
+        context_login=this;
         BtLogIn1 = findViewById(R.id.BtLogIn1);
         BtLogIn1.setOnClickListener(new View.OnClickListener() {
             @Override

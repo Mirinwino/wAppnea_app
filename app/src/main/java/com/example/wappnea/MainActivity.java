@@ -29,12 +29,13 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     public static Context context;
+    public static Context context_main;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context_main=this.getBaseContext();
         Button btn_StartSleep = findViewById(R.id.btnStartSleep);
-
         btn_StartSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private void openWhileSleeping() {
         Intent intent_1 = new Intent(this, WhileSleeping.class);
         startActivity(intent_1);
+        //intent_1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //finishAndRemoveTask();
     }
 }
 

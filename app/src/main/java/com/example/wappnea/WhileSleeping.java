@@ -65,7 +65,7 @@ public class WhileSleeping extends AppCompatActivity{
 
     //variable for the plot
     public static ArrayList<Entry> values2 = new ArrayList<>();
-
+    public static long duration;
     public static ArrayList<Double> abData = new ArrayList<Double>();
     public static ArrayList<Double> reallabels = new ArrayList<Double>();
     public double apneaFilter[];
@@ -225,10 +225,9 @@ public class WhileSleeping extends AppCompatActivity{
 
                     // go to night summary activity
                     Intent intent_2 = new Intent(WhileSleeping.this, NightSummary.class);
-
                     //calculate end time and duration based on number of samples acquired
                     long start = c.getTimeInMillis();
-                    long duration = windows.length*5*1000; // in milliseconds
+                    duration = windows.length*5*1000; // in milliseconds
                     long end = start+duration;
                     Calendar c2 = Calendar.getInstance();
                     c2.setTimeInMillis(end);
@@ -240,10 +239,9 @@ public class WhileSleeping extends AppCompatActivity{
                     info.putLong("label_duration", duration);
                     info.putString("label_endTime", endTime);
                     info.putInt("label_numEvents", numApp);
-
                     intent_2.putExtras(info);
                     startActivity(intent_2);
-                    finish();
+                    //finish();
                 }
                 catch (Exception e) {
                     Log.d(LOG_WhileSleeping,e.getMessage());

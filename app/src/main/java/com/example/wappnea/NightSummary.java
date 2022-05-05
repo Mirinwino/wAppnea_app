@@ -52,7 +52,13 @@ public class NightSummary extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent_plot = new Intent(NightSummary.this, LogIn.class);
+                intent_plot.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent_plot.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent_plot.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                intent_plot.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent_plot);
+                Runtime.getRuntime().exit(0);
+
             }
         });
 

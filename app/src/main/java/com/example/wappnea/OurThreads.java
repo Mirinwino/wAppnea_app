@@ -123,7 +123,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 try {
                     if(endThread==false){
                         reallabels.add(Double.parseDouble(receiveStringlabels));
-                        Log.d(LOG_Thread,"Value receive String: " + receiveStringlabels);
+                        //Log.d(LOG_Thread,"Value receive String: " + receiveStringlabels);
                     }
                     else{
                         isrlabels.close();
