@@ -67,6 +67,7 @@ public class WhileSleeping extends AppCompatActivity{
     public static ArrayList<Entry> values2 = new ArrayList<>();
 
     public static ArrayList<Double> abData = new ArrayList<Double>();
+    public static ArrayList<Double> reallabels = new ArrayList<Double>();
     public double apneaFilter[];
     public double[][] windows;
     double[][] features;

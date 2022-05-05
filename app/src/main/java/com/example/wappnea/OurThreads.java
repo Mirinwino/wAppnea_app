@@ -43,11 +43,13 @@ public class OurThreads extends WhileSleeping implements Runnable{
     public String LOG_Thread = "thread";
 
     private final String fileName = "abdoData22.txt";
+    private final String fileNameLabels = "labels22.txt";
     private boolean endThread;
     private String threadName;
     Thread thread;
     public static int plottingflag;
     public double[][] abDataValues;
+    public double[][] labelsValues;
 
 
     OurThreads(String theName){
@@ -64,6 +66,8 @@ public class OurThreads extends WhileSleeping implements Runnable{
         try {
             //String path = MainActivity.context.getFilesDir().toString();  //for internal storage
             File[] Dirs = ContextCompat.getExternalFilesDirs(MainActivity.context, null);
+
+            // start reading abdominal data --------------------------------------------------------
             File file = new File(Dirs[1],fileName); ///note: if u do not have sdcard chose 0, if u have chose 1
             FileInputStream fIn= new FileInputStream(file);
             //InputStream fIn=MainActivity.context.getResources().getAssets().open(fileName); //for internal storage
@@ -90,6 +94,31 @@ public class OurThreads extends WhileSleeping implements Runnable{
                 }
             }
             isr.close();
+            // end reading abdominal data ----------------------------------------------------------
+
+            // start reading labels ---------------------------------------------------------------
+            File filelabels = new File(Dirs[1],fileNameLabels); ///note: if u do not have sdcard chose 0, if u have chose 1
+            FileInputStream fInLabels= new FileInputStream(filelabels);
+            InputStreamReader isrlabels = new InputStreamReader(fInLabels);
+            BufferedReader bufferedReaderlabels = new BufferedReader(isrlabels);
+            String receiveStringlabels = "";
+            while ( (receiveStringlabels = bufferedReaderlabels.readLine()) != null ) {
+                try {
+                    if(endThread==false){
+                        reallabels.add(Double.parseDouble(receiveStringlabels));
+                        Log.d(LOG_Thread,"Value receive String: " + receiveStringlabels);
+                    }
+                    else{
+                        isrlabels.close();
+                    }
+                }catch(Exception e){
+                    Log.d(LOG_Thread, e.getMessage());
+                }
+            }
+            isrlabels.close();
+            // end reading labels ------------------------------------------------------------------
+
+
             plottingflag=1;
             new Thread(new Runnable() {
                 public int k;
@@ -113,6 +142,9 @@ public class OurThreads extends WhileSleeping implements Runnable{
                     }
                 }
             }).start();
+
+
+
             Log.d(LOG_Thread,"The reading ends");
             exit();
         }
@@ -121,6 +153,7 @@ public class OurThreads extends WhileSleeping implements Runnable{
             Log.d(LOG_Thread, e.getMessage());
             e.printStackTrace();
         }
+
         Log.d(LOG_Thread, endThread + " Stopped.");
     }
 
@@ -129,29 +162,29 @@ public class OurThreads extends WhileSleeping implements Runnable{
         LineData data = Live_chart.getData();
         if (data != null) {
             try {
-            ILineDataSet set = data.getDataSetByIndex(0);
-            //set.addEntry(...); // can be called as well
+                ILineDataSet set = data.getDataSetByIndex(0);
+                //set.addEntry(...); // can be called as well
 
-            if (set == null) {
-                set = createSet();
-                data.addDataSet(set);
-            }
+                if (set == null) {
+                    set = createSet();
+                    data.addDataSet(set);
+                }
 
-            float f = (float)inputData;
+                float f = (float)inputData;
 
-            data.addEntry(new Entry(set.getEntryCount(), f),0);
-            //data.notifyDataChanged();
+                data.addEntry(new Entry(set.getEntryCount(), f),0);
+                //data.notifyDataChanged();
 
-            // let the chart know it's data has changed
-            Live_chart.notifyDataSetChanged();
+                // let the chart know it's data has changed
+                Live_chart.notifyDataSetChanged();
 
-            // limit the number of visible entries
-            //Live_chart.setVisibleXRangeMaximum(2400);
-            //Live_chart.setVisibleYRange(30, AxisDependency.LEFT);
-            Live_chart.setVisibleXRange(200,400);
+                // limit the number of visible entries
+                //Live_chart.setVisibleXRangeMaximum(2400);
+                //Live_chart.setVisibleYRange(30, AxisDependency.LEFT);
+                Live_chart.setVisibleXRange(200,400);
 
-            // move to the latest entry
-            Live_chart.moveViewToX(data.getEntryCount());
+                // move to the latest entry
+                Live_chart.moveViewToX(data.getEntryCount());
 
             }catch(Exception e){
                 Log.d(LOG_Thread, e.getMessage()+"plot error");

@@ -44,8 +44,6 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
     private LineChart chart;
     private SeekBar seekBarX, seekBarY;
     private TextView tvX, tvY;
-    public ArrayList<Entry> v1, v2, v3;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +58,9 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Start plot definition -------------------------------------------------------------------
-        tvX = findViewById(R.id.tvXMax);
-        seekBarX = findViewById(R.id.seekBar1);
-        seekBarX.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener) this);
+//        tvX = findViewById(R.id.tvXMax);
+//        seekBarX = findViewById(R.id.seekBar1);
+//        seekBarX.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener) this);
 
         chart = findViewById(R.id.chart1);
         //chart.setOnChartValueSelectedListener((OnChartValueSelectedListener) this);
@@ -116,7 +114,7 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         setData(WhileSleeping.abData.size());
 
         // limit the number of visible entries
-        chart.setVisibleXRangeMaximum(2400*5); //limit to 5min
+        chart.setVisibleXRangeMaximum(2400*3); //limit to 5min
         //chart.setVisibleYRange(30, AxisDependency.LEFT);
 
         // move to the latest entry
@@ -129,9 +127,11 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
     private void setData(int count){
         // set1 = dataset with the abdominal belt signal (abData)
         // set2 = set with the results of apnea prediction (apneafilter)
+        // set3 = set with the real results of apnea prediction (reallabels)
 
         ArrayList<Entry> values1 = new ArrayList<>();
         ArrayList<Entry> values3 = new ArrayList<>();
+        ArrayList<Entry> values4 = new ArrayList<>();
         //ArrayList<Entry> values2 = new ArrayList<>(); //defined in WhileSleeping.java
 
         // We need to create ArrayList<Entry> from the ArrayList<Double> that is abData
@@ -145,11 +145,18 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
             values3.add(WhileSleeping.values2.get(i));
         }
 
-        LineDataSet set1, set2;
+        for (int i = 0; i < count; i++) {
+            double val = WhileSleeping.reallabels.get(i);
+            float f = (float)val;
+            values4.add(new Entry(i, f));
+        }
+
+        LineDataSet set1, set2, set3;
 
         // create a dataset and give it a type
         set1 = new LineDataSet(values1, "Abdominal signal");
         set2 = new LineDataSet(values3, "Apnea detection");
+        set3 = new LineDataSet(values4, "Apnea doctor labels");
 
         //start definition set1 --------------------------------------------------------------------
         set1.setAxisDependency(AxisDependency.LEFT);
@@ -169,15 +176,28 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         set2.setAxisDependency(AxisDependency.RIGHT);
         set2.setColor(Color.RED);
         set2.setDrawCircles(false);
-        set2.setLineWidth(2f);
+        set2.setLineWidth(5f);
         set2.setFillAlpha(65);
         set2.setFillColor(Color.RED);
         set2.setHighLightColor(Color.rgb(244, 117, 117));
         //set2.setFillFormatter(new MyFillFormatter(900f));
         //end definition set2 ----------------------------------------------------------------------
 
+        //start definition set3 --------------------------------------------------------------------
+        set3.setAxisDependency(AxisDependency.RIGHT);
+        set3.setColor(Color.GREEN);
+        set3.setDrawCircles(false);
+        set3.setDrawFilled(true);
+        set3.setLineWidth(0.5f);
+        set3.setFillAlpha(40);
+        set3.setFillColor(Color.GREEN);
+        set3.setHighLightColor(Color.rgb(244, 117, 117));
+        //set3.setFillFormatter(new MyFillFormatter(900f));
+        //end definition set3 ----------------------------------------------------------------------
+
+
         // create a data object with the data sets
-        LineData data = new LineData(set1, set2);
+        LineData data = new LineData(set1, set2, set3);
         data.setValueTextColor(Color.LTGRAY);
         data.setValueTextSize(9f);
 
