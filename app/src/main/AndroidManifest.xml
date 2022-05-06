@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- The manifest is a containing permission settings as an extra on top of default manifest file.
+    The read and write operation is require these lines below to make them adjustable.
+    Even if are not going to use writing right now, we added for future possible implementation for safe.
+    Also inside the application we requested External Storage Legacy, since we had problem with permission
+    at the beginning. Then, we kept it to be sure and safe. In order to start with LogIn.class, .Launcher, .Main
+    and .View is moved under activity LogIn.
+    under the .LogIn activity
+// Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
+/>-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.wappnea">
+
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
@@ -13,7 +24,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
-        android:launchMode="singleTop"
         android:theme="@style/Theme.WAppnea"
         tools:targetApi="r">
         <activity

@@ -1,27 +1,28 @@
 package com.example.wappnea;
 
-import androidx.appcompat.app.AppCompatActivity;
+// LogIn.java
+// This module is containing the choice of three different option to chose.
+// It is design to indicate different users in real-life application.
+// For the sake of software completeness, each button leads different test data from database right now.
+// Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
 
-import android.app.Activity;
-import android.content.Context;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
-import android.widget.Toast;
 
-//public class LogIn extends AppCompatActivity {
 public class LogIn extends AppCompatActivity{
-    public static Context context_login;
+    // 3 buttons initialized here.
     private Button BtLogIn1, BtLogIn2, BtLogIn3;
-
+    // LogInUser is used for specifying the data will be processed.
     public static int LogInUser;
-
+    // When the user click a button, the identity will be kept as
+    // 1,2 or 3 and a new intent of welcoming window will be created.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        context_login=this;
         BtLogIn1 = findViewById(R.id.BtLogIn1);
         BtLogIn1.setOnClickListener(new View.OnClickListener() {
             @Override

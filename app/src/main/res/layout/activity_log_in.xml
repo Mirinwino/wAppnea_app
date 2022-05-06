@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+activity_log_in.xml
+This xml file contains three Log in buttons. We tried to represent different users
+but it has 3 different dataset right now for the sake of software completeness due to
+we are not connecting the application to belt right now.
+Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
+/>-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

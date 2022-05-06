@@ -1,78 +1,51 @@
 package com.example.wappnea;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+// WhileSleeping.java
+// This java module includes graph initialization for continuous plotting,
+// external storage read permission check, taking the data from thread named
+// OurThread.java, applying feature extraction, standardization and decision tree,
+// specifying time information. Standard deviation, mean, energy and mean derivative
+// are features calculated via functions defined at the bottom of class.
+// Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
 
-import android.content.Context;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-
 import android.Manifest;
 import java.util.ArrayList;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.os.Handler;
-import android.os.Message;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.example.wappnea.DemoBase;
-
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Locale;
 
 public class WhileSleeping extends AppCompatActivity{
     private Button btn_WakeUp;
-
+    //Live_chart is initializing the plotting section for continuous plot
     public static LineChart Live_chart;
-
-    //variable for the plot
+    //values2 for the plot of application detection result
     public static ArrayList<Entry> values2 = new ArrayList<>();
+    //duration, abData, reallabels, windows and features will keep
+    //the sleeping time, whole data as array, doctor annotations,
+    //and data matrix with 5-second (40-sample) chunks and extracted features
     public static long duration;
     public static ArrayList<Double> abData = new ArrayList<Double>();
     public static ArrayList<Double> reallabels = new ArrayList<Double>();
-    public double apneaFilter[];
     public double[][] windows;
     double[][] features;
     public String LOG_WhileSleeping = "whileSleeping";
-    //public String path=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+    //Here values for permission check and request is defined.
     public static final int REQUEST_EXTERNAL_STORAGE = 1;
     public static final int EXTERNAL_STORAGE_PERMISSION_CODE = 23;
     public static String[] PERMISSIONS_STORAGE = {
@@ -85,8 +58,8 @@ public class WhileSleeping extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_while_sleeping);
 
-        setTitle("Input data");
         // Start plot definition -------------------------------------------------------------------
+        setTitle("Input data");
         Live_chart = findViewById(R.id.plotWhileSleep);
 
         // set an alternative background color
@@ -139,39 +112,34 @@ public class WhileSleeping extends AppCompatActivity{
         String date = sdf.format(c.getTime());
         String startTime = timef.format(c.getTime());
 
+        // context is defining here to find the external storage location in thread application
         MainActivity.context = getApplicationContext();
+
+        // Reading permission from external storage is checked and given if it is necessary. Manifest is also changed accordingly.
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 EXTERNAL_STORAGE_PERMISSION_CODE);
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Should we show an explanation?
+
             if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
+                Log.d(LOG_perm,"Permission granted: " + PackageManager.PERMISSION_GRANTED);
             } else {
-
-                // No explanation needed, we can request the permission.
                 requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
-
         Log.d(LOG_perm,"Permission granted: " + PackageManager.PERMISSION_GRANTED);
         Log.d(LOG_perm,"Media mounted: " + Environment.MEDIA_MOUNTED);
 
+        // Thread for reading and plotting data continuously is defined here. It is starting directly when it is defined.
         OurThreads t1 = new OurThreads("txt_reading");
 
-        //"setOnClickListener" run if the specified button is clicked.
+        // "setOnClickListener" run if the specified button is clicked.
         btn_WakeUp = findViewById(R.id.btnStopSleep);
         btn_WakeUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                // The application goes to summary screen.
                 try {
                     int numApp=0;
+                    // when the button is clicked, it will stop the reading and continuous plotting first.
                     if(t1.isStopped()==false){
                         windows=t1.exit();
                         OurThreads.plottingflag=0;
@@ -180,21 +148,26 @@ public class WhileSleeping extends AppCompatActivity{
                         windows= t1.abDataValues;
                         OurThreads.plottingflag=0;
                     }
+
+                    // apneaFilter will kept when the apnea event occurs within 5 seconds windows
                     double apneaFilter[]=new double[windows.length*40];
+
+                    //functions are defined at bottom of this class.
                     features=extract_feature(windows);
+
+                    // A vector is defined to use as one column of feature matrix in decision tree.
                     double[] My_0 = new double[4];
+
+                    // decision_tree function is applied to determine apnea stages
                     for (int i=0; i<windows.length;i++){
                         for (int j=0;j<4;j++) {
                             My_0[j] = features[j][i];
                         }
                         if(decision_tree(My_0)==1){
                             for(int k=0; k<40; k++){
+                                //if there is apnea, the location is valued as 1; if not, 0.
                                 apneaFilter[40*i+k]=1;
                             }
-                            //numApp++;
-                            //if(i<windows.length-3){
-                            //    i=i+2;
-                            //}
                         }
                         else{
                             for(int k=0; k<40; k++){
@@ -202,6 +175,9 @@ public class WhileSleeping extends AppCompatActivity{
                             }
                         }
                     }
+
+                    // 5 second filtering is applied here. If the apnea stage is just a
+                    // single 5 second, it will be regarded.
                     for (int i=40; i<apneaFilter.length; i=i+40){
                         if(apneaFilter[i]-apneaFilter[i-40]==1){
                             if(apneaFilter[i+40]-apneaFilter[i]==0){
@@ -214,17 +190,18 @@ public class WhileSleeping extends AppCompatActivity{
                             }
                         }
                     }
-
+                    // The application detection result is put into the plot to
+                    // transfer into the Visualization_of_results.java intent.
                     for (int i = 0; i < apneaFilter.length; i++) {
                         double val = apneaFilter[i];
                         float f = (float)val;
                         values2.add(new Entry(i, f));
                     }
-
                     Log.d(LOG_WhileSleeping,"Value num app: " + numApp);
 
-                    // go to night summary activity
+                    // The application goes to summary screen.
                     Intent intent_2 = new Intent(WhileSleeping.this, NightSummary.class);
+
                     //calculate end time and duration based on number of samples acquired
                     long start = c.getTimeInMillis();
                     duration = windows.length*5*1000; // in milliseconds
@@ -239,9 +216,9 @@ public class WhileSleeping extends AppCompatActivity{
                     info.putLong("label_duration", duration);
                     info.putString("label_endTime", endTime);
                     info.putInt("label_numEvents", numApp);
+                    //Transfering the calculations to the next intent
                     intent_2.putExtras(info);
                     startActivity(intent_2);
-                    //finish();
                 }
                 catch (Exception e) {
                     Log.d(LOG_WhileSleeping,e.getMessage());
@@ -250,8 +227,12 @@ public class WhileSleeping extends AppCompatActivity{
         });
     }
 
+    // This function has input of data matrix by
+    // (number of windows) x (number of sample at 5 seconds).
+    // It use mean, std, energy and mean_der functions to extract
+    // features. Then it standardize with standardization function.
+    // The return is the feature matrix containing all 4 features.
     public double[][] extract_feature(double[][] dataWindows){
-
         double[] mean = new double[dataWindows.length];
         double[] std = new double[dataWindows.length];
         double[] energy = new double[dataWindows.length];
@@ -274,7 +255,8 @@ public class WhileSleeping extends AppCompatActivity{
         return all_features;
     }
 
-    // reference https://searchcode.com/codesearch/view/78094523/
+    // This function has input of data vector within 5 seconds window.
+    // It extracts mean of data at this window.
     private static double mean(double[] dataWindow){
 
         double result =0.0;
@@ -287,7 +269,8 @@ public class WhileSleeping extends AppCompatActivity{
         return result;
     }
 
-    //https://www.geeksforgeeks.org/java-program-to-calculate-standard-deviation/
+    // This function has input of data vector within 5 seconds window.
+    // It extracts standard deviation of data at this window.
     private static double std(double[] dataWindow){
         double standardDeviation = 0.0;
         double meanResult =mean(dataWindow);
@@ -298,6 +281,8 @@ public class WhileSleeping extends AppCompatActivity{
         return res;
     }
 
+    // This function has input of data vector within 5 seconds window.
+    // It extracts energy of data at this window.
     private static double energy(double[] dataWindow){
         double energy = 0.0;
         for (int i = 0; i < dataWindow.length; i++) {
@@ -308,6 +293,8 @@ public class WhileSleeping extends AppCompatActivity{
         return energy;
     }
 
+    // This function has input of data vector within 5 seconds window.
+    // It extracts data's mean of derivative vector at this window.
     private static double mean_derivative(double[] dataWindow){
 
         double[] mean_der = new double[dataWindow.length];
@@ -319,18 +306,8 @@ public class WhileSleeping extends AppCompatActivity{
         return mean(mean_der);
     }
 
-    // reference https://searchcode.com/codesearch/view/78094523/
-    private static double[] subMean(double[] dataWindow){
-
-        double[] subst = new double[dataWindow.length];
-        double meanResult =mean(dataWindow);
-
-        for (int i=0;i<dataWindow.length;i++){
-            subst[i] = dataWindow[i] - meanResult;
-        }
-        return subst;
-    }
-
+    // This function has input of data vector indicates a feature parameter.
+    // It standardize the parameters by subtracting the mean and dividing to standard deviation.
     private static double[] standardization(double[] parameterValues){
         double meanParam = mean(parameterValues);
         double stdParam = std(parameterValues);
@@ -342,6 +319,9 @@ public class WhileSleeping extends AppCompatActivity{
         return standardizedParameterValues;
     }
 
+    // This function has input of data vector indicates a feature parameter.
+    // It applies decision tree classification with parameters
+    // reached from trained model in MATLAB
     private static double decision_tree(double[] features){
         double estimated_class = 0;
 
@@ -383,13 +363,6 @@ public class WhileSleeping extends AppCompatActivity{
                 }
             }
         }
-
         return  estimated_class;
     }
-
-
-    // Edit the set view
-
-
-
 }

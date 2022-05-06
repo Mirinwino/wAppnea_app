@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  activity_night_summary.xml
+  The Night Summary window design contains date, start, end and duration
+  of sleep in the text field. Also Apnea Hypoapnea index and informative text
+  about seriousness of sleeping apnea night are place below. The window is led
+  through result plot with "See Results in Plot" button. Also the app is
+  returning to start with "Back to Start" button.
+ Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
+/>-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

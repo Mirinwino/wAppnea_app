@@ -1,26 +1,22 @@
 package com.example.wappnea;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+// Visualization_of_results.java
+// This module creates plots of whole data, detection of application and
+// doctor annotations to compare with color of blue, red and green respectively.
+// The plots will be in a chart might be scrolled, zoomed and converted to landscape.
+// Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
+
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.widget.SeekBar.OnSeekBarChangeListener;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.AxisDependency;
@@ -31,16 +27,12 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.example.wappnea.DemoBase;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Visualization_of_results extends AppCompatActivity implements OnSeekBarChangeListener,
         OnChartValueSelectedListener {
-//public class Visualization_of_results extends AppCompatActivity {
+
     private LineChart chart;
     private SeekBar seekBarX, seekBarY;
     private TextView tvX, tvY;
@@ -58,9 +50,6 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Start plot definition -------------------------------------------------------------------
-//        tvX = findViewById(R.id.tvXMax);
-//        seekBarX = findViewById(R.id.seekBar1);
-//        seekBarX.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener) this);
 
         chart = findViewById(R.id.chart1);
         //chart.setOnChartValueSelectedListener((OnChartValueSelectedListener) this);
@@ -115,7 +104,6 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
 
         // limit the number of visible entries
         chart.setVisibleXRangeMaximum(2400*3); //limit to 5min
-        //chart.setVisibleYRange(30, AxisDependency.LEFT);
 
         // move to the latest entry
         chart.moveViewToX(data.getEntryCount());
@@ -140,11 +128,9 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
             float f = (float)val;
             values1.add(new Entry(i, f));
         }
-
         for (int i = 0; i < count; i++) {
             values3.add(WhileSleeping.values2.get(i));
         }
-
         for (int i = 0; i < count; i++) {
             double val = WhileSleeping.reallabels.get(i);
             float f = (float)val;
@@ -166,10 +152,7 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
         set1.setDrawCircles(false);
-        //set1.setFillFormatter(new MyFillFormatter(0f));
-        //set1.setDrawHorizontalHighlightIndicator(false);
         set1.setVisible(true);
-        //set1.setCircleHoleColor(Color.WHITE);
         //end definition set1 ----------------------------------------------------------------------
 
         //start definition set2 --------------------------------------------------------------------
@@ -180,7 +163,6 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         set2.setFillAlpha(65);
         set2.setFillColor(Color.RED);
         set2.setHighLightColor(Color.rgb(244, 117, 117));
-        //set2.setFillFormatter(new MyFillFormatter(900f));
         //end definition set2 ----------------------------------------------------------------------
 
         //start definition set3 --------------------------------------------------------------------
@@ -192,9 +174,7 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         set3.setFillAlpha(40);
         set3.setFillColor(Color.GREEN);
         set3.setHighLightColor(Color.rgb(244, 117, 117));
-        //set3.setFillFormatter(new MyFillFormatter(900f));
         //end definition set3 ----------------------------------------------------------------------
-
 
         // create a data object with the data sets
         LineData data = new LineData(set1, set2, set3);
@@ -217,18 +197,6 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
         // redraw
         chart.invalidate();
     }
-
-    // BACK FROM TOP MENU --------------------------------------------------------------------------
-    // this event will enable the back function to the button on press
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                this.finish();
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -364,29 +332,20 @@ public class Visualization_of_results extends AppCompatActivity implements OnSee
                 break;
             }
         }
-        //return true;
         return super.onOptionsItemSelected(item);
     }
 
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
     }
-
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
     }
-
-
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-
     }
-
     @Override
     public void onNothingSelected() {
-
     }
 }

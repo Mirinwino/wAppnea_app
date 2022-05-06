@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+activity_main.xml
+This xml file includes a text message which indicates to user having
+a suitable sleeping position after put abdominal belt on and a "Start Sleep" button starting to read data.
+Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
+/>-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

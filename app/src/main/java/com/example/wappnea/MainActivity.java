@@ -1,54 +1,34 @@
 package com.example.wappnea;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+// MainActivity.java
+// This module is used for a welcoming page before user goes to sleep.
+// The button will started a new intent with WhileSleeping.java in which
+// most of the analysis is conducted.
+// Agnese Calvani, Esra Gizem Gungor, Miriam Peinado Martin, Omer Altan
 
-import android.Manifest;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import java.lang.Math;
-import java.lang.String;
-import android.widget.EditText;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Environment;
-import android.util.Log;
-
-import androidx.core.content.ContextCompat;
-
-// Chart
-
 
 public class MainActivity extends AppCompatActivity {
+    //context will be used for finding external storage directory later
     public static Context context;
-    public static Context context_main;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context_main=this.getBaseContext();
         Button btn_StartSleep = findViewById(R.id.btnStartSleep);
         btn_StartSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWhileSleeping();
+                //starting the new intent
+                Intent intent_1 = new Intent(MainActivity.this, WhileSleeping.class);
+                startActivity(intent_1);
             }
         });
-    }
-
-    private void openWhileSleeping() {
-        Intent intent_1 = new Intent(this, WhileSleeping.class);
-        startActivity(intent_1);
-        //intent_1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //finishAndRemoveTask();
     }
 }
 
